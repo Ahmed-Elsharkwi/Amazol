@@ -13,7 +13,7 @@ def add_seller():
     if "email" not in seller_data or "name" not in seller_data or "photo_url" not in seller_data:
         return jsonify({"state": "bad request"}), 403
 
-    result = storage.get_attribute(Seller, "email",seller_data['email'])
+    result = storage.get_with_one_attribute(Seller, "email",seller_data['email'])
 
     if result is not None:
         return jsonify({"state": "user already exists"}), 302

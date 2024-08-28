@@ -99,7 +99,7 @@ class DBStorage:
 
         return count
 
-    def get_attribute(self, cls, attribute, att_val):
+    def get_with_one_attribute(self, cls, attribute, att_val):
         """
         Returns the object based on the class name and its attribute, or
         None if not found
@@ -114,7 +114,7 @@ class DBStorage:
 
         return None
 
-    def get_attribute(self, cls, attribute_1, att_1_val, attribute_2, att_2_val):
+    def get_with_two_attribute(self, cls, attribute_1, att_1_val, attribute_2, att_2_val):
         """
         Returns the object based on the class name and its two attributes, or
         None if not found
@@ -124,7 +124,7 @@ class DBStorage:
 
         all_cls = self.all(cls)
         for value in all_cls.values():
-            if ((value.__dict__[attribute_1 == att_1_val) and (value.__dict[attribute_2] == att_2_val)):
+            if (value.__dict__[attribute_1] == att_1_val) and (value.__dict[attribute_2] == att_2_val):
                 return value
 
         return None
@@ -135,12 +135,30 @@ class DBStorage:
             return None
 
         data = []
-        amounts = []
+        objects = []
         all_cls = self.all(cls)
         for value in all_cls.values():
             if value.__dict__[attribute] == att_id:
                 data.append(value.product_id)
-                amounts.append(value.amount)
+                objects.append(value)
 
         products = storage.__session.query(Product).filter(Product.id.in_(data)).all()
-        return products, amounts
+        return products, objects
+
+    def get_all_products(self, cls, attribute, att_id):
+        """ get all items with a specific id """
+        if cls not in classes.values():
+            return None
+
+        data = {}
+        all_cls = self.all(cls)
+        for value in all_cls.values():
+            if value.__dict__[attribute] == att_id:
+                data_value = value.to_dict()
+                del data_value['_sa_instance_state']
+                del data_value['seller_id']
+
+                data[value.id] = data_value
+
+        return data
+

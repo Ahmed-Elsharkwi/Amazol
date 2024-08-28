@@ -31,7 +31,7 @@ class Product(BaseModel, Base):
     name = Column(String(128), nullable=False, unique=True)
     price = Column(Integer, nullable=False)
     amount = Column(Integer, nullable=False)
-    seller_id = Column(String(60), ForeignKey('Seller.id'))
+    seller_id = Column(String(60), ForeignKey('sellers.id'))
     relationship('User_Product', backref='product')
     relationship('Cart_Product', backref='product')
 

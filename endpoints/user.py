@@ -13,7 +13,7 @@ def add_user():
     if "email" not in user_data or "name" not in user_data or "photo_url" not in user_data:
         return jsonify({"state": "bad request"}), 403
 
-    result = storage.get_attribute(User, "email",user_data['email'])
+    result = storage.get_with_one_attribute(User, "email",user_data['email'])
 
     if result is not None:
         return jsonify({"state": "user already exists"}), 302
