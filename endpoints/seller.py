@@ -11,12 +11,12 @@ def add_seller():
     """ add_new_seller """
     seller_data = request.json
     if "email" not in seller_data or "name" not in seller_data or "photo_url" not in seller_data:
-        return jsonify({"state": "bad request"}), 403
+        return jsonify({"state": "bad request"}), 400
 
     result = storage.get_with_one_attribute(Seller, "email",seller_data['email'])
 
     if result is not None:
-        return jsonify({"state": "user already exists"}), 302
+        return jsonify({"state": "seller already exists"}), 200
 
     new_seller = Seller(**seller_data)
 
@@ -39,12 +39,12 @@ def get_seller():
     seller_id = data['data_1']
 
     if 'type' not in data or data['type'] != 'seller':
-        return jsonify({'state': 'Not Authorized'}), 401
+        return jsonify({'state': 'Not Authorized'}), 403
 
     seller = storage.get(Seller, seller_id)
 
     if seller is None:
-        return jsonify({"state": "seller is not found"}), 403
+        return jsonify({"state": "seller is not found"}), 404
 
     seller_data = seller.to_dict()
     del seller_data['_sa_instance_state']
@@ -72,12 +72,12 @@ def update_seller_info():
     seller_id = data['data_1']
 
     if 'type' not in data or data['type'] != 'seller':
-        return jsonify({'state': 'Not Authorized'}), 401
+        return jsonify({'state': 'Not Authorized'}), 403
 
     seller = storage.get(Seller, seller_id)
 
     if seller is None:
-        return jsonify({"state": "seller is not found"}), 403
+        return jsonify({"state": "seller is not found"}), 404
 
     for data in request.json:
         if data in allowed_data:
@@ -101,12 +101,12 @@ def delete_seller():
     seller_id = data['data_1']
 
     if 'type' not in data or data['type'] != 'seller':
-        return jsonify({'state': 'Not Authorized'}), 401
+        return jsonify({'state': 'Not Authorized'}), 403
 
     seller = storage.get(Seller, seller_id)
 
     if seller is None:
-        return jsonify({"state": "seller is not found"}), 403
+        return jsonify({"state": "seller is not found"}), 404
 
     storage.delete(seller)
     storage.save()

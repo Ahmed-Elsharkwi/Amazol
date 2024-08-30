@@ -11,12 +11,12 @@ def add_user():
     """ add_new_user """
     user_data = request.json
     if "email" not in user_data or "name" not in user_data or "photo_url" not in user_data:
-        return jsonify({"state": "bad request"}), 403
+        return jsonify({"state": "bad request"}), 400
 
     result = storage.get_with_one_attribute(User, "email",user_data['email'])
 
     if result is not None:
-        return jsonify({"state": "user already exists"}), 302
+        return jsonify({"state": "user already exists"}), 200
 
     new_user = User(**user_data)
 
@@ -40,7 +40,7 @@ def get_user():
     user = storage.get(User, user_id)
 
     if user is None:
-        return jsonify({"state": "user is not found"}), 403
+        return jsonify({"state": "user is not found"}), 404
 
     user_data = user.to_dict()
     del user_data['_sa_instance_state']
@@ -69,7 +69,7 @@ def update_user_info():
     user = storage.get(User, user_id)
 
     if user is None:
-        return jsonify({"state": "user is not found"}), 403
+        return jsonify({"state": "user is not found"}), 404
 
     for data in request.json:
         if data in allowed_data:
@@ -94,10 +94,8 @@ def delete_user():
     user = storage.get(User, user_id)
 
     if user is None:
-        return jsonify({"state": "user is not found"}), 403
+        return jsonify({"state": "user is not found"}), 404
 
     storage.delete(user)
     storage.save()
     return jsonify("okay"), 200
-
-

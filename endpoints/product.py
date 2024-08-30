@@ -20,7 +20,7 @@ def add_new_product():
         return jsonify({"state": "Not Authenticated"}), 401
 
     if 'type' not in data or data['type'] != 'seller':
-        return jsonify({"state": "Not Authorized"}), 401
+        return jsonify({"state": "Not Authorized"}), 403
 
     seller_id = data['data_1']
     json_data = request.json
@@ -32,12 +32,12 @@ def add_new_product():
                             "amount" not in json_data) or (
                                     'photo' not in json_data):
 
-            return jsonify({"state": "bad request"}), 403
+            return jsonify({"state": "bad request"}), 400
 
     result = storage.get_with_one_attribute(Product, "name",json_data['name'])
 
     if result is not None:
-        return jsonify({"state": "name already exists"}), 302
+        return jsonify({"state": "name already exists"}), 404
 
 
     photo_url = f"/tmp/{json_data['name']}.jpg"
@@ -67,13 +67,13 @@ def update_product_info():
         return jsonify({"state": "Not Authenticated"}), 401
 
     if 'type' not in data or data['type'] != 'seller':
-        return jsonify({"state": "Not Authorized"}), 401
+        return jsonify({"state": "Not Authorized"}), 403
 
     seller_id = data['data_1']
     json_data = request.json
 
     if 'product_id' not in json_data:
-        return jsonify({'state': 'bad_request'}), 403
+        return jsonify({'state': 'bad_request'}), 400
 
     allowed_list = ['price', 'description', 'name', 'amount', 'photo']
 
@@ -83,7 +83,7 @@ def update_product_info():
         return jsonify({"state": "product is not found"}), 404
 
     if product.seller_id != seller_id:
-        return jsonify({"state": "You are not the owner of the product"}), 401 
+        return jsonify({"state": "You are not the owner of the product"}), 403 
 
 
     name = product.name
@@ -92,7 +92,7 @@ def update_product_info():
         result = storage.get_with_one_attribute(Product, "name",json_data['name'])
 
         if result is not None:
-            return jsonify({"state": "name already exists"}), 302
+            return jsonify({"state": "name already exists"}), 200
 
         name = json_data['name']
 
@@ -130,7 +130,7 @@ def get_product_info():
     json_data = request.json
 
     if 'product_id' not in json_data:
-        return jsonify({'state': 'bad_request'}), 403
+        return jsonify({'state': 'bad_request'}), 400
 
     product = storage.get(Product, json_data['product_id'])
 
@@ -156,14 +156,14 @@ def delete_product_info():
         return jsonify({"state": "Not Authenticated"}), 401
 
     if 'type' not in data or data['type'] != 'seller':
-        return jsonify({"state": "Not Authorized"}), 401
+        return jsonify({"state": "Not Authorized"}), 403
 
 
     seller_id = data['data_1']
     json_data = request.json
 
     if 'product_id' not in json_data:
-        return jsonify({'state': 'bad_request'}), 403
+        return jsonify({'state': 'bad_request'}), 400
 
     product = storage.get(Product, json_data['product_id'])
 
@@ -171,7 +171,7 @@ def delete_product_info():
         return jsonify({"state": "product is not found"}), 404
 
     if product.seller_id != seller_id:
-        return jsonify({"state": "You are not the owner of the product"}), 401
+        return jsonify({"state": "You are not the owner of the product"}), 403
 
     if os.path.exists(product.photo_url):
         os.remove(product.photo_url)
@@ -195,7 +195,7 @@ def get_seller_products_info():
         return jsonify({"state": "Not Authenticated"}), 401
 
     if 'type' not in data or data['type'] != 'seller':
-        return jsonify({"state": "Not Authorized"}), 401
+        return jsonify({"state": "Not Authorized"}), 403
 
 
     seller_id = data['data_1']

@@ -40,7 +40,7 @@ class Product(BaseModel, Base):
         super().__init__(*args, **kwargs)
 
 
-class User_Product(Base, BaseModel):
+class User_Product(BaseModel, Base):
     """ user_product """
     __tablename__ = 'user_product'
 
@@ -48,7 +48,7 @@ class User_Product(Base, BaseModel):
     product_id = Column(String(60), ForeignKey('products.id'))
     amount = Column(Integer, nullable=False)
     payment_type = Column(String(60), nullable=False)
-    states = Column(String(60), nullable=False)
+    states = Column(String(60), nullable=True)
 
     def __init__(self, *args, **kwargs):
         """initializes products"""

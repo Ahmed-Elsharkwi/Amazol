@@ -124,7 +124,7 @@ class DBStorage:
 
         all_cls = self.all(cls)
         for value in all_cls.values():
-            if (value.__dict__[attribute_1] == att_1_val) and (value.__dict[attribute_2] == att_2_val):
+            if (value.__dict__[attribute_1] == att_1_val) and (value.__dict__[attribute_2] == att_2_val):
                 return value
 
         return None
@@ -142,7 +142,7 @@ class DBStorage:
                 data.append(value.product_id)
                 objects.append(value)
 
-        products = storage.__session.query(Product).filter(Product.id.in_(data)).all()
+        products = self.__session.query(Product).filter(Product.id.in_(data)).all()
         return products, objects
 
     def get_all_products(self, cls, attribute, att_id):
