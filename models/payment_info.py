@@ -12,8 +12,10 @@ class Payment(BaseModel, Base):
     __tablename__ = 'payment_info'
     number = Column(String(60), nullable=False)
     cvv = Column(Integer, nullable=False)
-    expiry_date = Column(DateTime, nullable=False)
-    user_id = Column(String(60), ForeignKey('users.id'), unique=True)
+    expiry_date = Column(String(60), nullable=False)
+    holder_name = Column(String(60), nullable=False)
+    payment_type = Column(String(60), nullable=False)
+    user_id = Column(String(60), ForeignKey('users.id'))
 
     def __init__(self, *args, **kwargs):
         """ initializes user """

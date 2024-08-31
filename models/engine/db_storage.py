@@ -156,9 +156,11 @@ class DBStorage:
             if value.__dict__[attribute] == att_id:
                 data_value = value.to_dict()
                 del data_value['_sa_instance_state']
-                del data_value['seller_id']
+                if cls == Product:
+                    del data_value['seller_id']
+                else:
+                    del data_value['user_id']
 
                 data[value.id] = data_value
 
         return data
-

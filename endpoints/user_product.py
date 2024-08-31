@@ -11,8 +11,7 @@ import os
 @app_views.route('/new_order', strict_slashes=False, methods=['POST'])
 def add_new_order():
     """ add new order to the user_product table """
-    #jwt_token = request.cookies.get("token")
-    jwt_token = request.json['token']
+    jwt_token = request.cookies.get("token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -22,10 +21,9 @@ def add_new_order():
 
 
     user_id = data['data_1']
-    user = storage.get_with_one_attribute(User, "id",user_id)
 
-    if user is None:
-        return jsonify({"state": "user is not found"}), 404
+    if 'type' not in data or data['type'] != 'user':
+        return jsonify({"state": "Not Authorized"}), 403
 
     json_data = request.json
 
@@ -65,8 +63,7 @@ def add_new_order():
 @app_views.route('/orders_info', strict_slashes=False, methods=['GET'])
 def get_orders_info():
     """ get the info of the orders """
-    #jwt_token = request.cookies.get("token")
-    jwt_token = request.json['token']
+    jwt_token = request.cookies.get("token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -76,11 +73,11 @@ def get_orders_info():
 
 
     user_id = data['data_1']
-    json_data = request.json
-    user = storage.get_with_one_attribute(User, "id",user_id)
 
-    if user is None:
-        return jsonify({"state": "user is not found"}), 404
+    if 'type' not in data or data['type'] != 'user':
+        return jsonify({"state": "Not Authorized"}), 403
+
+    json_data = request.json
 
 
     products, orders = storage.get_all_item_id(User_Product, 'user_id', user_id)
@@ -109,8 +106,7 @@ def get_orders_info():
 @app_views.route('/order_not_exist', strict_slashes=False, methods=['DELETE'])
 def delete_order_info():
     """ delete the info of the order """
-    #jwt_token = request.cookies.get("token")
-    jwt_token = request.json['token']
+    jwt_token = request.cookies.get("token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -119,12 +115,12 @@ def delete_order_info():
         return jsonify({"state": "Not Authenticated"}), 401
 
     user_id = data['data_1']
+
+    if 'type' not in data or data['type'] != 'user':
+        return jsonify({"state": "Not Authorized"}), 403
+
     json_data = request.json
 
-    user = storage.get_with_one_attribute(User, "id",user_id)
-
-    if user is None:
-        return jsonify({"state": "user is not found"}), 404
 
     if 'product_id' not in json_data:
         return jsonify({'state': 'product_id is missing'}), 400

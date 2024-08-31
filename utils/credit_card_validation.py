@@ -30,7 +30,7 @@ def validate_credit_card_num(credit_card_num):
                 return "Vaild number"
 
     except Exception as e:
-        print(e)
+        pass
     return "Invalid number"
 
 
@@ -51,7 +51,7 @@ def get_card_type(card_number, cvv):
 
     for card_type, pattern in card_types.items():
         if re.match(pattern, card_number):
-            result = False
+            result = None
             credit_type = card_type
 
     if credit_type == "American Express":
@@ -89,4 +89,6 @@ def main():
     print(validate_credit_card_num(number))
     print(get_card_type(number, cvv))
     print(verify_date(month, year))
-main()
+
+if __name__ == "__main__":
+    main()

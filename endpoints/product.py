@@ -207,6 +207,4 @@ def get_seller_products_info():
     if products == {}:
         return jsonify({"state": "there are not any products"}), 404
 
-
-
     return jsonify(products), 200

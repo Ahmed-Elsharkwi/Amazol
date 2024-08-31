@@ -8,3 +8,4 @@ from endpoints.user import *
 from endpoints.seller import *
 from endpoints.product import *
 from endpoints.user_product import *
+from endpoints.payment import *
