@@ -45,8 +45,8 @@ class BaseModel():
         of __dict__ of the instance"""
         new_dict = self.__dict__.copy()
         #new_dict["__class__"] = self.__class__.__name__
-        new_dict["updated_at"] = new_dict["updated_at"].strftime(
-                "%Y-%m-%dT%H:%M:%S.%f")
-        new_dict["created_at"] = new_dict["created_at"].strftime(
-                "%Y-%m-%dT%H:%M:%S.%f")
+        #new_dict["updated_at"] = new_dict["updated_at"].strftime(
+                #"%Y-%m-%dT%H:%M:%S.%f")
+        #new_dict["created_at"] = new_dict["created_at"].strftime(
+                #"%Y-%m-%dT%H:%M:%S.%f")
         return new_dict

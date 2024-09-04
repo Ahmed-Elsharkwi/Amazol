@@ -28,7 +28,7 @@ class Product(BaseModel, Base):
     __tablename__ = 'products'
     description  = Column(String(128), nullable=False)
     photo_url = Column(String(128), nullable=False)
-    name = Column(String(128), nullable=False, unique=True)
+    name = Column(String(128), nullable=False, unique=True, index=True)
     price = Column(Integer, nullable=False)
     amount = Column(Integer, nullable=False)
     seller_id = Column(String(60), ForeignKey('sellers.id'))

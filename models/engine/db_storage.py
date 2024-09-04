@@ -13,6 +13,8 @@ from os import getenv
 import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.sql import text
+
 
 classes = {
         "User": User, 
@@ -163,4 +165,28 @@ class DBStorage:
 
                 data[value.id] = data_value
 
+        return data
+
+    def get_products_with_offest_limit(self, start_offset, page_limit, pages, search_query=None):
+        """ get items of products with offset and a specific limit """
+        data = {}
+
+        if search_query is None:
+            products = self.__session.query(Product).offset(start_offset).limit(page_limit).all()
+        else:
+            products = self.__session.query(Product).filter(text(
+                    "MATCH(name) AGAINST(:query IN NATURAL LANGUAGE MODE)")).params(
+                            query=search_query).offset(
+                                    start_offset).all()
+            if pages is False:
+                data['length'] = len(products)
+
+            products = products[0: page_limit]
+
+        for value in products:
+            data_value = value.to_dict()
+            del data_value['_sa_instance_state']
+            del data_value['seller_id']
+
+            data[value.id] = data_value
         return data
