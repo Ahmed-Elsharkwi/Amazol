@@ -11,7 +11,7 @@ import os
 @app_views.route('/new_order', strict_slashes=False, methods=['POST'])
 def add_new_order():
     """ add new order to the user_product table """
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("user_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -48,7 +48,7 @@ def add_new_order():
     if json_data['amount'] > product.amount:
         return jsonify({'state': message}) , 404
 
-    del json_data['token']
+    del json_data['user_token']
     json_data['user_id'] = user_id
     new_order = User_Product(**json_data)
     product.amount = product.amount - json_data['amount']
@@ -63,7 +63,7 @@ def add_new_order():
 @app_views.route('/orders_info', strict_slashes=False, methods=['GET'])
 def get_orders_info():
     """ get the info of the orders """
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("user_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -106,7 +106,7 @@ def get_orders_info():
 @app_views.route('/order_not_exist', strict_slashes=False, methods=['DELETE'])
 def delete_order_info():
     """ delete the info of the order """
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("user_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)

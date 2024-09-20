@@ -28,7 +28,7 @@ def add_seller():
 @app_views.route('/seller_info', methods=['GET'], strict_slashes=False)
 def get_seller():
     """ get the seller info """
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("seller_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -61,7 +61,7 @@ def get_seller():
 def update_seller_info():
     """ update the info of the seller """
     allowed_data = ['phone_number', 'address']
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("seller_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -90,7 +90,7 @@ def update_seller_info():
 @app_views.route('/seller_not_exist' ,  methods=['DELETE'], strict_slashes=False)
 def delete_seller():
     """ delete the seller """
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("seller_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)

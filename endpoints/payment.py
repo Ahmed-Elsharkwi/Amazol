@@ -11,8 +11,8 @@ from utils.jwt_encoding_decoding_method import verify_jwt
 @app_views.route('/new_payment_method',  methods=['POST'], strict_slashes=False)
 def add_payment_method():
     """ add_new_payment_method """
-    #jwt_token = request.cookies.get("token")
-    jwt_token = request.json['token']
+    jwt_token = request.cookies.get("user_token")
+
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -66,8 +66,8 @@ def add_payment_method():
 @app_views.route('/payment_info', methods=['GET'], strict_slashes=False)
 def get_payment():
     """ get the payment info """
-    #jwt_token = request.cookies.get("token")
-    jwt_token = request.json['token']
+    jwt_token = request.cookies.get("user_token")
+
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -107,8 +107,8 @@ def get_payment():
 def update_payment_info():
     """ update the info of the payment """
     allowed_data = ['holder_name', 'expiry_date']
-    #jwt_token = request.cookies.get("token")
-    jwt_token = request.json['token']
+    jwt_token = request.cookies.get("user_token")
+
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -141,8 +141,8 @@ def update_payment_info():
 @app_views.route('/payment_not_exist' ,  methods=['DELETE'], strict_slashes=False)
 def delete_payment():
     """ delete the payment method """
-    #jwt_token = request.cookies.get("token")
-    jwt_token = request.json['token']
+    jwt_token = request.cookies.get("user_token")
+
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)

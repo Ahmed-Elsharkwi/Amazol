@@ -11,7 +11,7 @@ import os
 @app_views.route('/new_product', strict_slashes=False, methods=['POST'])
 def add_new_product():
     """ add new product to the products table """
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("seller_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -37,10 +37,10 @@ def add_new_product():
     result = storage.get_with_one_attribute(Product, "name",json_data['name'])
 
     if result is not None:
-        return jsonify({"state": "name already exists"}), 404
+        return jsonify({"state": "name already exists"}), 200
 
 
-    photo_url = f"/tmp/{json_data['name']}.jpg"
+    photo_url = f"/static/{json_data['name']}.jpg"
     with open(photo_url, 'wb') as file:
         file.write(base64.b64decode(json_data['photo']))
 
@@ -58,7 +58,7 @@ def add_new_product():
 @app_views.route('/new_product_info', strict_slashes=False, methods=['PUT'])
 def update_product_info():
     """ update the info of the product """
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("seller_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -99,8 +99,8 @@ def update_product_info():
     for key, value in json_data.items():
         if key in allowed_list:
             if key == 'photo':
-                photo_url = f"/tmp/{name}.jpg"
-                if photo_url != product.photo_url and os.path.exists(product.photo_url):
+                photo_url = f"/static/{name}.jpg"
+                if os.path.exists(product.photo_url):
                     os.remove(product.photo_url)
 
                 with open(photo_url, 'wb') as file:
@@ -117,22 +117,13 @@ def update_product_info():
 @app_views.route('/product_info', strict_slashes=False, methods=['GET'])
 def get_product_info():
     """ get the info of the product """
-    jwt_token = request.cookies.get("token")
-    data = None
-    if jwt_token is not None:
-        data = verify_jwt(jwt_token)
 
-    if jwt_token is None or data is None:
-        return jsonify({"state": "Not Authenticated"}), 401
+    product_name = request.args.get('name')
 
-
-    user_id = data['data_1']
-    json_data = request.json
-
-    if 'product_id' not in json_data:
+    if product_name is None:
         return jsonify({'state': 'bad_request'}), 400
 
-    product = storage.get(Product, json_data['product_id'])
+    product = storage.get_with_one_attribute(Product, "name", product_name)
 
     if product is None:
         return jsonify({"state": "product is not found"}), 404
@@ -147,7 +138,7 @@ def get_product_info():
 @app_views.route('/product_not_exist', strict_slashes=False, methods=['DELETE'])
 def delete_product_info():
     """ delete the info of the product """
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("seller_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -186,7 +177,7 @@ def delete_product_info():
 @app_views.route('/seller_products_info', strict_slashes=False, methods=['GET'])
 def get_seller_products_info():
     """ get the info of the product """
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("seller_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)

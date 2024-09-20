@@ -110,9 +110,9 @@ class DBStorage:
             return None
 
         all_cls = self.all(cls)
-        for value in all_cls.values():
-            if (value.__dict__[attribute] == att_val):
-                return value
+        for object in all_cls.values():
+            if (object.__dict__[attribute] == att_val):
+                return object
 
         return None
 

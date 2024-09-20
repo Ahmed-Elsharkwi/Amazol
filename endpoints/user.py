@@ -46,9 +46,9 @@ def get_user():
     del user_data['_sa_instance_state']
 
     if user_data["phone_number"] is None:
-        user_data['phone_number'] = "no phone number found"
+        user_data['phone_number'] = "no phone number was found"
     if user_data["address"] is None:
-        user_data['address'] = "no address found"
+        user_data['address'] = "no address was found"
 
     return jsonify(user_data), 200
 
@@ -57,7 +57,7 @@ def get_user():
 def update_user_info():
     """ update the info of the user """
     allowed_data = ['phone_number', 'address']
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("user_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -82,7 +82,7 @@ def update_user_info():
 @app_views.route('/user_not_exist' ,  methods=['DELETE'], strict_slashes=False)
 def delete_user():
     """ delete the user """
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("user_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)

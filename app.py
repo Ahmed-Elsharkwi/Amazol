@@ -13,14 +13,14 @@ CORS(app, supports_credentials=True)
 app.register_blueprint(app_views)
 
 
-@app.route('/products_data/', defaults={'word': None}, methods=['GET'], strict_slashes=False)
-@app.route('/products_data/<word>', methods=['GET'], strict_slashes=False)
+@app.route('/products_data/', defaults={'word': None}, methods=['POST'], strict_slashes=False)
+@app.route('/products_data/<word>', methods=['POST'], strict_slashes=False)
 def get_requeired_data(word):
     """ get the required data depending on the search parmeters """
     if "page" not in request.json:
         page = 1
     else:
-        page = request.json['page']
+        page = str(request.json['page'])
         res = re.match(r'^\d+$', page)
         if res is None:
             return jsonify({'state': 'Not a valid input'}), 400
@@ -37,7 +37,7 @@ def get_requeired_data(word):
 
     if word is not None:
         result = re.match(r'^\b([A-Za-z0-9]+(?:\s+[A-Za-z0-9]+)*)\b$', word)
-
+        print(result)
         if result is None:
             return jsonify("Not a Valid input"), 400
 
@@ -51,8 +51,8 @@ def get_requeired_data(word):
 
         data['page'] = page
 
-    if len(data) == 2:
-            return jsonify({'state': "There are not any products now"}), 404
+    if len(data) == 2 or len(data) == 0:
+        return jsonify("we don't have that product now"), 404
 
     return jsonify(data), 200
 

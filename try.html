@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazol</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: white;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .search-bar {
+            flex-grow: 1;
+            max-width: 500px;
+            margin: 0 1rem;
+            position: relative;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 0.5rem;
+            padding-right: 2.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .search-button {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .header-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ccc;
+            background-color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        .cart-button {
+            position: relative;
+            padding-top: 1.5rem;
+        }
+        .cart-count {
+            background-color: #007bff;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            position: absolute;
+            top: 0;
+            right: 50%;
+            transform: translateX(50%);
+        }
+        main {
+            padding: 2rem 0;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .product-info {
+            padding: 1rem;
+        }
+        .product-title {
+            font-size: 1.2rem;
+            margin: 0 0 0.5rem 0;
+        }
+        .product-price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 0 0 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">Amazol</h1>
+                <div class="search-bar">
+                    <input type="search" placeholder="Search products..." id="searchInput">
+                    <button class="search-button" id="searchButton">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="header-buttons">
+                    <button class="btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        Login
+                    </button>
+                    <div class="cart-button">
+                        <span class="cart-count" id="cartCount">0</span>
+                        <button class="btn" id="cartBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                            Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="container">
+        <div class="product-grid" id="productGrid"></div>
+    </main>
+    <script>
+        const productos = [
+            { id: 1, name: "Product 1", price: "$19.99" },
+            { id: 2, name: "Product 2", price: "$24.99" },
+            { id: 3, name: "Product 3", price: "$14.99" },
+            { id: 4, name: "Product 4", price: "$29.99" },
+            { id: 5, name: "Product 5", price: "$39.99" },
+            { id: 6, name: "Product 6", price: "$49.99" },
+        ];
+
+        let cartItems = 0;
+
+        function updateCartCount() {
+            document.getElementById('cartCount').textContent = cartItems;
+        }
+
+        function addToCart() {
+            cartItems++;
+            updateCartCount();
+        }
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.id = product.id
+            card.innerHTML = `
+                <img src="banana.jpeg" alt="${product.name}" class="product-image">
+                <div class="product-info">
+                    <h2 class="product-title">${product.name}</h2>
+                    <p class="product-price">${product.price}</p>
+                    <button class="btn btn-primary add-to-cart">Add to Cart</button>
+                </div>
+            `;
+            card.querySelector('.add-to-cart').addEventListener('click', addToCart);
+            return card;
+        }
+
+        function renderProducts() {
+            const productGrid = document.getElementById('productGrid');
+            fetch("http://localhost:5000/products_data", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}),
+            })
+            .then(response => response.json())
+            .then(products => { for (const product in products) {
+                    productGrid.appendChild(createProductCard(products[product]));
+
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+            
+        }
+
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm)
+            );
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = '';
+            filteredProducts.forEach(product => {
+                productGrid.appendChild(createProductCard(product));
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            updateCartCount();
+
+            document.getElementById('searchButton').addEventListener('click', performSearch);
+            document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
