@@ -147,6 +147,7 @@ def logout():
 @app.route('/', methods=['GET'], strict_slashes=False)
 def get_main_page():
     """ get home page """
+    search_query = request.args.get('search_query')
     token = request.cookies.get('token_user')
     token_1 = request.cookies.get('token_seller')
 
@@ -163,13 +164,17 @@ def get_main_page():
             data = requests.get('http://localhost:5000/Amazol/seller_info', cookies={'token': token_1})
             seller_name = data.json()['name']
      
-    return render_template('home.html', user=user_name, seller=seller_name)
+    return render_template('home.html', user=user_name, seller=seller_name, search_query=search_query)
 
-@app.route('/home', methods=['GET'], strict_slashes=False)
+@app.route('/product_info', methods=['GET'], strict_slashes=False)
 def print_message():
     """ get home page """
+    product_name = request.args.get('product_name')
 
-    return jsonify("i am good")
+    if product_name is None:
+        return jsonify("Product is not found"), 404
+
+    return render_template('product.html', product_name=product_name)
 
 
 

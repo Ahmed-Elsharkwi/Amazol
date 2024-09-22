@@ -123,6 +123,7 @@ def get_product_info():
     if product_name is None:
         return jsonify({'state': 'bad_request'}), 400
 
+    product_name = product_name.strip()
     product = storage.get_with_one_attribute(Product, "name", product_name)
 
     if product is None:
