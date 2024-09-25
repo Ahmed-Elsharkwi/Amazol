@@ -7,6 +7,7 @@ from flask import jsonify, request
 from utils.jwt_encoding_decoding_method import verify_jwt
 import base64
 import os
+from datetime import datetime
 
 @app_views.route('/new_order', strict_slashes=False, methods=['POST'])
 def add_new_order():
@@ -40,24 +41,24 @@ def add_new_order():
     order = storage.get_with_two_attribute(
             User_Product, 'product_id', json_data['product_id'], 'user_id', user_id)
 
-    if order is not None:
+    if (order is not None) and (order.created_at.hour == datetime.utcnow().hour):
+
         return jsonify({'state': 'order already exists'}), 200
 
     message = f'The required amount is not avalible, the available amount is {product.amount}'
 
-    if json_data['amount'] > product.amount:
+    if int(json_data['amount']) > product.amount:
         return jsonify({'state': message}) , 404
 
-    del json_data['user_token']
     json_data['user_id'] = user_id
     new_order = User_Product(**json_data)
-    product.amount = product.amount - json_data['amount']
+    product.amount = product.amount - int(json_data['amount'])
 
     product.save()
     storage.new(new_order)
     storage.save()
 
-    return jsonify({"state": "order is added"}), 200
+    return jsonify({"state": "order is placed"}), 200
 
 
 @app_views.route('/orders_info', strict_slashes=False, methods=['GET'])

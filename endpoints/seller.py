@@ -82,7 +82,7 @@ def update_seller_info():
     for data in request.json:
         if data in allowed_data:
             setattr(seller, data, request.json[data])
-    user.save()
+    seller.save()
 
     return jsonify("okay"), 200
 

@@ -83,8 +83,8 @@ def get_payment():
 
     payments = storage.get_all_products(Payment, 'user_id', user_id)
 
-    if payments is None:
-        return jsonify({"state": "There are not any payments"}), 404
+    if len(payments) == 0:
+        return jsonify({"state": "There are not any payment methods"}), 404
 
     data = {}
     for key, value in payments.items():

@@ -49,9 +49,9 @@ def login():
     session['type'] = request.args.get('type')
 
     if session['type'] == 'user' or session['type'] is None:
-        token_type = 'token_user'
+        token_type = 'user_token'
     elif session['type'] == 'seller':
-        token_type = 'token_seller'
+        token_type = 'seller_token'
     else:
         return jsonify({"state": "Don't change the type of the user"}), 200
 
@@ -91,11 +91,11 @@ def authorize():
         if type_object == 'user' or type_object is None:
             Class_name = User
             url = 'http://localhost:5000/Amazol/new_user'
-            token_type = 'token_user'
+            token_type = 'user_token'
         else:
             Class_name = Seller
             url = 'http://localhost:5000/Amazol/new_seller'
-            token_type = 'token_seller'
+            token_type = 'seller_token'
 
         Object = storage.get_with_one_attribute(Class_name,'email', resp['email']) 
 
@@ -148,8 +148,8 @@ def logout():
 def get_main_page():
     """ get home page """
     search_query = request.args.get('search_query')
-    token = request.cookies.get('token_user')
-    token_1 = request.cookies.get('token_seller')
+    token = request.cookies.get('user_token')
+    token_1 = request.cookies.get('seller_token')
 
     user_name = None
     seller_name = None
@@ -170,11 +170,26 @@ def get_main_page():
 def print_message():
     """ get home page """
     product_name = request.args.get('product_name')
+    token = request.cookies.get('user_token')
+    token_1 = request.cookies.get('seller_token')
+
+    user_name = None
+    seller_name = None
+
+    if token is not None:
+        if verify_jwt(token) is not None:
+            data = requests.get('http://localhost:5000/Amazol/user_info', cookies={'token': token})
+            user_name = data.json()['name']
+
+    if token_1 is not None:
+        if verify_jwt(token_1) is not None:
+            data = requests.get('http://localhost:5000/Amazol/seller_info', cookies={'token': token_1})
+            seller_name = data.json()['name']
 
     if product_name is None:
         return jsonify("Product is not found"), 404
 
-    return render_template('product.html', product_name=product_name)
+    return render_template('product.html', product_name=product_name, user=user_name, seller=seller_name)
 
 
 
