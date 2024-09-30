@@ -58,15 +58,10 @@
     </main>
 
     <div class="bottom-bar">
-        {% if seller %}
-            <div class="bottom-bar-content">
-                <button onclick="get_seller_info('{{ seller }}')">Work with us</button>
-            </div>
-        {% else %}
-            <div class="bottom-bar-content">
-                <button onclick="sign_in_seller()">Work with us</button>
-            </div>
-        {% endif %}
+        <div class="bottom-bar-content">
+            <button onclick="get_seller_info()">Work with us</button>
+        </div>
+
     </div>
     <script src="/static/scripts/home.js">
     </script>

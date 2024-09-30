@@ -161,7 +161,7 @@ def get_main_page():
 
     if token_1 is not None:
         if verify_jwt(token_1) is not None:
-            data = requests.get('http://localhost:5000/Amazol/seller_info', cookies={'token': token_1})
+            data = requests.get('http://localhost:5000/Amazol/seller_info', cookies={'seller_token': token_1})
             seller_name = data.json()['name']
      
     return render_template('home.html', user=user_name, seller=seller_name, search_query=search_query)
@@ -191,6 +191,11 @@ def print_message():
 
     return render_template('product.html', product_name=product_name, user=user_name, seller=seller_name)
 
+
+@app.route('/seller_profile', methods=['GET'], strict_slashes=False)
+def get_seller_profile():
+    """get the seller profile"""
+    return render_template('seller_profile.html')
 
 
 @app.teardown_appcontext

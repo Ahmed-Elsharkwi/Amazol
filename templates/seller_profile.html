@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Profile</title>
+    <link rel="stylesheet" href="/static/css/seller.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/8446a08b11.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1 class="logo" onclick="get_main_page()">Amazol</h1>
+    <div class="container">
+        <header class="profile-header">
+            <div class="profile-info">
+                <h1 id="seller-name">John Doe</h1>
+                <div id="email-container" class="editable-container_1">
+                    <div id="email-display" class="display-section">
+                        <label for="email">Email:</label>
+                        <div id="email-text" class="editable-text">john@example.com</div>
+                    </div>
+                </div>
+                <div id="address-container" class="editable-container">
+                    <div id="address-display" class="display-section">
+                        <label for="address">Address:</label>
+                        <div id="address-text" class="editable-text">123 Main St, City, Country</div>
+                        <i class="fa-sharp fa-solid fa-pen-to-square edit-button"></i>
+                    </div>
+                    <div id="address-edit" class="edit-section">
+                        <label for="address">Address:</label>
+                        <div id="address-editable" class="editable-field" contenteditable="true">123 Main St, City, Country</div>
+                        <button class="save-button">✔️</button>
+                    </div>
+                </div>
+                <div id="phone-container" class="editable-container">
+                    <div id="phone-display" class="display-section">
+                        <label for="phone">Phone:</label>
+                        <div id="phone-text" class="editable-text">+1 234 567 8900</div>
+                        <i class="fa-sharp fa-solid fa-pen-to-square edit-button"></i>
+                    </div>
+                    <div id="phone-edit" class="edit-section">
+                        <label for="phone">Phone:</label>
+                        <div id="phone-editable" class="editable-field" contenteditable="true">+1 234 567 8900</div>
+                        <button class="save-button">✔️</button>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-picture">
+                <img id="profile-image" src="/placeholder.svg" alt="Seller Profile Picture">
+            </div>
+        </header>
+
+        <main>
+            <section class="add-product-section">
+                <h2>Add New Product</h2>
+                <form id="add-product-form" class="product-form">
+                    <input type="text" id="product-name" placeholder="Product Name" required>
+                    <input type="number" id="product-price" placeholder="Product Price" required min="1">
+                    <input type="number" id="product-amount" placeholder="Product Amount" required min="1">
+                    <textarea id="product-description" placeholder="Product Description" required></textarea>
+                    <input type="file" id="product-photo" accept="image/*" required>
+                    <button type="submit">Add Product</button>
+                </form>
+            </section>
+
+            <section class="product-list-section">
+                <h2>Your Products</h2>
+                <div id="product-list" class="product-grid">
+                    <!-- Product items will be added here dynamically -->
+                </div>
+                <p id="no-products-message" class="hidden">There are no products. Add some products to see them here.</p>
+            </section>
+        </main>
+
+        <div id="edit-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Edit Product</h2>
+                <form id="edit-product-form" class="product-form">
+                    <input type="text" id="edit-name" placeholder="Product Name"  class='data_modification' name='name' >
+                    <input type="number" id="edit-price" placeholder="Product Price" class='data_modification' name="price"  min="1">
+                    <input type="number" id="edit-amount" placeholder="Product Amount" class='data_modification' name="amount"  min="1">
+                    <textarea id="edit-description" placeholder="Product Description" class='data_modification' name="description" ></textarea>
+                    <input type="file" id="edit-photo" class='data_modification' name="photo" accept="image/*">
+                    <button type="submit">Modify</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/scripts/seller.js"></script>
+</body>
+</html>

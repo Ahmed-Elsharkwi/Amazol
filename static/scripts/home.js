@@ -180,8 +180,9 @@ function sign_in_seller() {
     window.location.href = "http://localhost:3000/login?type=seller&next_page=/";
 }
 
-function get_seller_info(name) {
-    alert(`welcome seller ${name}`)
+function get_seller_info() {
+    window.location.href = "http://localhost:3000/seller_profile";
+
 }
 
 function get_product_info(product_name) {

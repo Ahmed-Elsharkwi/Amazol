@@ -84,7 +84,7 @@ def update_seller_info():
             setattr(seller, data, request.json[data])
     seller.save()
 
-    return jsonify("okay"), 200
+    return jsonify({"state": f"data is updated"}), 200
 
 
 @app_views.route('/seller_not_exist' ,  methods=['DELETE'], strict_slashes=False)

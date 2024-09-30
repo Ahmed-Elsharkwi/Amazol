@@ -39,9 +39,11 @@ def add_new_product():
     if result is not None:
         return jsonify({"state": "name already exists"}), 200
 
+    if int(json_data['price']) <= 0 or int(json_data['amount']) <= 0:
+        return jsonify({'state': "price and amount can not be 0 or less"}), 400
 
-    photo_url = f"/static/{json_data['name']}.jpg"
-    with open(photo_url, 'wb') as file:
+    photo_url = f"/static/{json_data['name']}.jpeg"
+    with open(f'.{photo_url}', 'wb') as file:
         file.write(base64.b64decode(json_data['photo']))
 
     json_data['photo_url'] = photo_url
@@ -52,7 +54,7 @@ def add_new_product():
     storage.new(new_product)
     storage.save()
 
-    return jsonify({"state": "Product is added"}), 200
+    return jsonify({"state": "Product is added", "product_id": new_product.id}), 200
     
 
 @app_views.route('/new_product_info', strict_slashes=False, methods=['PUT'])
@@ -100,10 +102,11 @@ def update_product_info():
         if key in allowed_list:
             if key == 'photo':
                 photo_url = f"/static/{name}.jpg"
-                if os.path.exists(product.photo_url):
-                    os.remove(product.photo_url)
+                if photo_url != product.photo_url:
+                    if os.path.exists(f'.{product.photo_url}'):
+                        os.remove(f'.{product.photo_url}')
 
-                with open(photo_url, 'wb') as file:
+                with open(f'.{photo_url}', 'wb') as file:
                     file.write(base64.b64decode(json_data['photo']))
                 product.photo_url = photo_url
             else:
@@ -165,14 +168,14 @@ def delete_product_info():
     if product.seller_id != seller_id:
         return jsonify({"state": "You are not the owner of the product"}), 403
 
-    if os.path.exists(product.photo_url):
-        os.remove(product.photo_url)
+    if os.path.exists(f".{product.photo_url}"):
+        os.remove(f".{product.photo_url}")
 
 
     storage.delete(product)
     storage.save()
 
-    return jsonify("okay"), 200
+    return jsonify({"state": "the product is deleted"}), 200
 
 
 @app_views.route('/seller_products_info', strict_slashes=False, methods=['GET'])
@@ -191,7 +194,6 @@ def get_seller_products_info():
 
 
     seller_id = data['data_1']
-    json_data = request.json
 
 
     products = storage.get_all_products(Product, 'seller_id', seller_id)

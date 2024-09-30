@@ -1,56 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Quantity Selector</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-}
-
-.product {
-    margin-bottom: 20px;
-}
-
-label {
-    margin-right: 10px;
-    font-size: 18px;
-}
-
-select {
-    padding: 5px;
-    font-size: 16px;
-    width: 60px;
-    text-align: center;
-    appearance: none; /* Remove default arrow */
-    background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEuNzA3MTcsNC4yOTI5N0wxLjcwNzE3LDUuNzA3MTdMMTIsMTYuOTk5OUwxMiwwTDEuNzA3MTcsNC4yOTI5N1oiIGZpbGw9IiMwMDAiLz4KPC9zdmc+Cg==') no-repeat right 10px center;
-    background-size: 12px;
-}
-
-    </style>
-</head>
-
-<body>
-    <div class="product">
-        <label for="quantity">Quantity:</label>
-        <select id="quantity"></select>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    const maxQuantity = 10; // Example maximum quantity available
-    const quantitySelect = document.getElementById('quantity');
-
-    for (let i = 1; i <= maxQuantity; i++) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = i;
-        quantitySelect.appendChild(option);
-    }
-});
-
-    </script>
-</body>
-</html>
+<input type="file" id="imageInput" />
+<button onclick="uploadImage()">Upload</button>
+<script>
+  function uploadImage() {
+    const fileInput = document.getElementById('imageInput');
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    
+    reader.onloadend = function() {
+      const base64String = reader.result.replace('data:', '').replace(/^.+,/, '');
+      // Send base64String to the back end
+      fetch('http://127.0.0.1:5000/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ image: base64String })
+      })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error:', error));
+    };
+    
+    reader.readAsDataURL(file);
+  }
+</script>
