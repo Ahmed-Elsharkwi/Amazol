@@ -149,47 +149,37 @@ def get_main_page():
     """ get home page """
     search_query = request.args.get('search_query')
     token = request.cookies.get('user_token')
-    token_1 = request.cookies.get('seller_token')
 
     user_name = None
-    seller_name = None
+
 
     if token is not None:
         if verify_jwt(token) is not None:
             data = requests.get('http://localhost:5000/Amazol/user_info', cookies={'token': token})
             user_name = data.json()['name']
 
-    if token_1 is not None:
-        if verify_jwt(token_1) is not None:
-            data = requests.get('http://localhost:5000/Amazol/seller_info', cookies={'seller_token': token_1})
-            seller_name = data.json()['name']
+    
      
-    return render_template('home.html', user=user_name, seller=seller_name, search_query=search_query)
+    return render_template('home.html', user=user_name, search_query=search_query)
 
 @app.route('/product_info', methods=['GET'], strict_slashes=False)
 def print_message():
     """ get home page """
     product_name = request.args.get('product_name')
     token = request.cookies.get('user_token')
-    token_1 = request.cookies.get('seller_token')
 
     user_name = None
-    seller_name = None
 
     if token is not None:
         if verify_jwt(token) is not None:
             data = requests.get('http://localhost:5000/Amazol/user_info', cookies={'token': token})
             user_name = data.json()['name']
 
-    if token_1 is not None:
-        if verify_jwt(token_1) is not None:
-            data = requests.get('http://localhost:5000/Amazol/seller_info', cookies={'token': token_1})
-            seller_name = data.json()['name']
 
     if product_name is None:
         return jsonify("Product is not found"), 404
 
-    return render_template('product.html', product_name=product_name, user=user_name, seller=seller_name)
+    return render_template('product.html', product_name=product_name, user=user_name)
 
 
 @app.route('/seller_profile', methods=['GET'], strict_slashes=False)

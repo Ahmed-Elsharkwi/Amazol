@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ product api """
 from endpoints import app_views
-from models.user_product import Product
+from models.user_product import Product, User_Product
 from models.start import storage
 from flask import jsonify, request
 from utils.jwt_encoding_decoding_method import verify_jwt
@@ -170,6 +170,13 @@ def delete_product_info():
 
     if os.path.exists(f".{product.photo_url}"):
         os.remove(f".{product.photo_url}")
+
+    products, orders = storage.get_all_item_id(User_Product, "product_id",json_data['product_id'])
+
+    if len(orders) != 0:
+        for order in orders:
+            storage.delete(order)
+        storage.save()
 
 
     storage.delete(product)

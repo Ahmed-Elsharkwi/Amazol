@@ -25,7 +25,6 @@ const closePopupBtn = document.getElementById('closePopup');
                 });
                 if (response.ok){                     
                     const payment_methods = await response.json();
-                    console.log(payment_methods)
                     popup.innerHTML=''
                     let data = {}
                     let place_order = null
@@ -88,7 +87,7 @@ const closePopupBtn = document.getElementById('closePopup');
                     const message = await response.json()
 
                     if (response.status == 401){
-                        window.location.href = `http://localhost:3000/login?type=user&next_page=/product_info?product_name= {{ product_name }}`;
+                        window.location.href = `http://localhost:3000/login?type=user&next_page=/product_info?product_name= ${product.name}`;
                         return null
                     }
                     else{
@@ -141,7 +140,7 @@ const closePopupBtn = document.getElementById('closePopup');
 
                     `
                     product_info.innerHTML = `
-                        <img src="/static/banana.jpeg" alt="Product Image" class="product-image">
+                        <img src="${product.photo_url}" alt="Product Image" class="product-image">
                     `
                     
 

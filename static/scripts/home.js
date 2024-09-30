@@ -33,7 +33,7 @@ function createProductCard(product) {
     card.className = 'product-card';
     card.id = product.id;
     card.innerHTML = `
-        <img src="/static/banana.jpeg" alt="${product.name}" class="product-image" id="click_me" onclick="get_product_info('${product.name}')">
+        <img src="${product.photo_url}" alt="${product.name}" class="product-image" id="click_me" onclick="get_product_info('${product.name}')">
         <div class="product-info">
             <h2 class="product-title" id="click_me" onclick="get_product_info('${product.name}')">${product.name}</h2>
             <p class="product-price" id="click_me" onclick="get_product_info('${product.name}')">${product.price}</p>
@@ -171,14 +171,11 @@ function sign_in_user() {
 }
 
 function get_user_info(name) {
-    console.log(name)
     alert(`welcome mr ${name}`)
     //window.location.href = "http://localhost:3000/user_info";
 }
 
-function sign_in_seller() {
-    window.location.href = "http://localhost:3000/login?type=seller&next_page=/";
-}
+
 
 function get_seller_info() {
     window.location.href = "http://localhost:3000/seller_profile";

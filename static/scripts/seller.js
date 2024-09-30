@@ -222,6 +222,7 @@ async function deleteProduct(index) {
     if (response.ok){
         products.splice(index, 1);
         await updateProductList();
+        localStorage.removeItem(product.product_id)
     }
 
 }
