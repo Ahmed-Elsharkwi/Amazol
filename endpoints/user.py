@@ -28,7 +28,7 @@ def add_user():
 @app_views.route('/user_info', methods=['GET'], strict_slashes=False)
 def get_user():
     """ get the user info """
-    jwt_token = request.cookies.get("token")
+    jwt_token = request.cookies.get("user_token")
     data = None
     if jwt_token is not None:
         data = verify_jwt(jwt_token)
@@ -76,7 +76,7 @@ def update_user_info():
             setattr(user, data, request.json[data])
     user.save()
 
-    return jsonify("okay"), 200
+    return jsonify({"state": "user info is updated"}), 200
 
 
 @app_views.route('/user_not_exist' ,  methods=['DELETE'], strict_slashes=False)

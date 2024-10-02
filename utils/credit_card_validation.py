@@ -31,7 +31,7 @@ def validate_credit_card_num(credit_card_num):
 
     except Exception as e:
         pass
-    return "Invalid number"
+    return "Invalid credit card number"
 
 
 def get_card_type(card_number, cvv):
@@ -79,7 +79,7 @@ def verify_date(month, year):
     if (year == current_year and month < current_month) or (year < current_year):
         return "Invalid date"
 
-    return "Valid date"
+    return "Valid card"
 
 
 def main():

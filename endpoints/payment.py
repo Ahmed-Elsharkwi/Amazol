@@ -33,10 +33,15 @@ def add_payment_method():
                                     "year" not in payment_method_data):
         return jsonify({"state": "bad request"}), 400
 
-    result = storage.get_with_one_attribute(Payment, "number",payment_method_data['number'])
+    result = storage.get_all_products(Payment, "user_id", user_id)
 
-    if result is not None:
-        return jsonify({"state": "payment method already exists"}), 200
+    if len(result) == 3:
+        return jsonify({"state": "The maximum number of payment methods is 3"}), 400
+
+    for payment_way in result.values():
+        print(payment_way)
+        if payment_way['number'] == payment_method_data['number']:
+            return jsonify({"state": "payment method already exists"}), 400
 
     respond = validate_credit_card_num(payment_method_data['number'])
 
@@ -49,7 +54,7 @@ def add_payment_method():
         if respond != "Invalid cvv":
             respond = verify_date(payment_method_data['month'], payment_method_data['year'])
 
-            if respond == "Valid date":
+            if respond == "Valid card":
                 payment_method_data['user_id'] = user_id
                 payment_method_data['expiry_date'] = f'{payment_method_data["month"]}/{payment_method_data["year"]}'
                 del payment_method_data['month']
@@ -58,9 +63,9 @@ def add_payment_method():
 
                 storage.new(new_payment_method)
                 storage.save()
-                return jsonify({"state": "okay"}), 200
+                return jsonify({"state": "payment method is added", "id": new_payment_method.id}), 200
 
-    return jsonify({"state": respond}), 200
+    return jsonify({"state": respond}), 400
 
 
 @app_views.route('/payment_info', methods=['GET'], strict_slashes=False)
@@ -89,7 +94,7 @@ def get_payment():
     data = {}
     for key, value in payments.items():
         date = value['expiry_date'].split('/')
-        if verify_date(date[0], date[1]) == "Valid date":
+        if verify_date(date[0], date[1]) == "Valid card":
             number = value["number"]
             number = number[len(number) - 5 : len(number) - 1]
             data[key] = {
@@ -98,6 +103,7 @@ def get_payment():
                     "expiry_date": value["expiry_date"],
                     "payment_type": value["payment_type"],
                     "billing_address": user.address,
+                    "id": value['id']
                     }
 
     return jsonify(data), 200
@@ -127,14 +133,14 @@ def update_payment_info():
     if payment_method is None:
         return jsonify({"state": "payment_method is not found"}), 404
 
-    if verify_date(request.json['month'], request.json['year']) == "Valid date":
+    if verify_date(request.json['month'], request.json['year']) == "Valid card":
         request.json['expiry_date'] = f'{request.json["month"]}/{request.json["year"]}'
         for data in request.json:
             if data in allowed_data:
                 setattr(payment_method, data, request.json[data])
         payment_method.save()
     
-        return jsonify("okay"), 200
+        return jsonify({"state": "the payment method in updated"}), 200
 
     return jsonify("Invalid date"), 200
 
@@ -161,4 +167,4 @@ def delete_payment():
 
     storage.delete(payment_method)
     storage.save()
-    return jsonify("okay"), 200
+    return jsonify({"state": "the payment method is deleted"}), 200

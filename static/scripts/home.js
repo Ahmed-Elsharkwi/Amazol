@@ -171,8 +171,7 @@ function sign_in_user() {
 }
 
 function get_user_info(name) {
-    alert(`welcome mr ${name}`)
-    //window.location.href = "http://localhost:3000/user_info";
+    window.location.href = "http://localhost:3000/user_profile";
 }
 
 
