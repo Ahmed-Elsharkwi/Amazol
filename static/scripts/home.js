@@ -1,7 +1,7 @@
 let cartItems = 0;
 
 function get_user_orders(){
-    alert("orders are here")
+    window.location.href = 'http://localhost:3000/orders_info'
 }
 function updateCartCount() {
     document.getElementById('cartCount').textContent = cartItems;
@@ -170,7 +170,7 @@ function sign_in_user() {
     window.location.href = "http://localhost:3000/login?type=user&next_page=/";
 }
 
-function get_user_info(name) {
+function get_user_info() {
     window.location.href = "http://localhost:3000/user_profile";
 }
 

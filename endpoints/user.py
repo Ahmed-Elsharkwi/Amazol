@@ -5,6 +5,7 @@ from models.user_product import User
 from models.start import storage
 from flask import jsonify, request
 from utils.jwt_encoding_decoding_method import verify_jwt
+import re
 
 @app_views.route('/new_user',  methods=['POST'], strict_slashes=False)
 def add_user():
@@ -71,8 +72,17 @@ def update_user_info():
     if user is None:
         return jsonify({"state": "user is not found"}), 404
 
+    regex_address = r'(\d+)?(\s+)?\w+(\s+\w+)*?'
+    regex_phone_num = r'\d+'
     for data in request.json:
         if data in allowed_data:
+            if data == 'address':
+                if re.match(regex_address, request.json[data]) is None:
+                    return jsonify({"state": "it is not a valid address"}), 400
+            if data == 'phone_number':
+                if re.match(regex_phone_num, request.json[data]) is None:
+                    return jsonify({"state": "it is not a valid phone number"}), 400
+                
             setattr(user, data, request.json[data])
     user.save()
 

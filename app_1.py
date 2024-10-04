@@ -192,7 +192,10 @@ def get_user_info():
     """get user profile page """
     return render_template('user.html')
 
-
+@app.route('/orders_info', methods=['GET'], strict_slashes=False)
+def get_user_orders():
+    """get the orders of the user"""
+    return render_template('orders.html')
 
 @app.teardown_appcontext
 def teardown(exc):

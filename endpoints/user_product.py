@@ -5,8 +5,6 @@ from models.user_product import User_Product, User, Product
 from models.start import storage
 from flask import jsonify, request
 from utils.jwt_encoding_decoding_method import verify_jwt
-import base64
-import os
 from datetime import datetime
 
 @app_views.route('/new_order', strict_slashes=False, methods=['POST'])
@@ -25,6 +23,11 @@ def add_new_order():
 
     if 'type' not in data or data['type'] != 'user':
         return jsonify({"state": "Not Authorized"}), 403
+    
+    user = storage.get_with_one_attribute(User, "id",user_id)
+
+    if user.address is None or user.phone_number is None:
+        return jsonify({"state": "please add your address and your phone number in your profile page"}), 400
 
     json_data = request.json
 
@@ -78,8 +81,8 @@ def get_orders_info():
     if 'type' not in data or data['type'] != 'user':
         return jsonify({"state": "Not Authorized"}), 403
 
-    json_data = request.json
 
+    user = storage.get_with_one_attribute(User, "id",user_id)
 
     products, orders = storage.get_all_item_id(User_Product, 'user_id', user_id)
 
@@ -98,7 +101,8 @@ def get_orders_info():
                         'product_photo_url': product.photo_url,
                         'order_date': order.created_at,
                         'payment_method': order.payment_type,
-                        'order_amount': order.amount
+                        'order_amount': order.amount,
+                        'billing_address': user.address
                         }
 
     return jsonify(data), 200
@@ -142,4 +146,4 @@ def delete_order_info():
     product.save()
     storage.save()
 
-    return jsonify("okay"), 200
+    return jsonify({"state": "the product is deleted"}), 200
