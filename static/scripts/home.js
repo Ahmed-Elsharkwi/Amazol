@@ -114,7 +114,7 @@ else {
                     if (data['pages'] != undefined) {
                         let div_buttons = document.createElement('div');
                         div_buttons.className = 'pages'
-                        let botton_id = ''
+                        let button_id = ''
 
                         for (let page_number = 1; page_number <= data['pages']; page_number++) {
                             // Create a button for each page number
@@ -183,6 +183,10 @@ function get_seller_info() {
 
 function get_product_info(product_name) {
     window.location.href = `http://localhost:3000/product_info?product_name=${product_name}`
+}
+
+function get_cart(){
+    window.location.href = 'http://localhost:3000/cart'
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

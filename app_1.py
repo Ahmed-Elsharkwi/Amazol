@@ -197,6 +197,12 @@ def get_user_orders():
     """get the orders of the user"""
     return render_template('orders.html')
 
+@app.route('/cart', methods=['GET'], strict_slashes=False)
+def get_cart_page():
+    """ get the cart page """
+    return render_template('cart.html')
+
+
 @app.teardown_appcontext
 def teardown(exc):
     """ hanle teardown_qppcontext """

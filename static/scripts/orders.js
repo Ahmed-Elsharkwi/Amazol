@@ -15,7 +15,7 @@
                 })
                 const orders = await response.json()
                 if (response.ok){
-                    for(order in orders){
+                    for(let order in orders){
                         const orderCard = document.createElement('div');
                         orderCard.className = 'order-card';
 
@@ -34,7 +34,7 @@
                             <div class="order-content">
                                     <div class="product" data-product-id="${orders[order].product_id}">
                                         <div class="product-info">
-                                            <img src="${orders[order].product_photo_url}" alt="${orders[order].product_name}" class="product-image" id="product_info" onclick='get_product_info(${orders[order].product_name})'>
+                                            <img src="${orders[order].product_photo_url}" alt="${orders[order].product_name}" class="product-image" id="product_info" onclick="get_product_info('${orders[order].product_name}')">
                                             <p id="product_info" onclick="get_product_info('${orders[order].product_name}')">${orders[order].product_name}</p>
                                         </div>
                                         <button class="delete-btn" onclick="deleteProduct('${orders[order].product_id}')">Delete</button>

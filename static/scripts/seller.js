@@ -277,6 +277,7 @@ async function saveEdit(e) {
     if (response.ok) {
         await updateProductList();
         await closeModal();
+        localStorage.setItem(product['product_id'], JSON.stringify(product))
         
     }
     else{

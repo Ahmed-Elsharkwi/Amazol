@@ -37,7 +37,7 @@ def get_requeired_data(word):
 
     if word is not None:
         result = re.match(r'^\b([A-Za-z0-9]+(?:\s+[A-Za-z0-9]+)*)\b$', word)
-        print(result)
+
         if result is None:
             return jsonify("Not a Valid input"), 400
 
