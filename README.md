@@ -19,32 +19,32 @@
 1- clone the repo
 ```shell
   git clone https://github.com/Ahmed-Elsharkwi/Amazol.git
-``
+```
 
 2- get inside the repo
 ```shell
   cd Amazol
-``
+```
 
 3- run the get-requirements file
 ```shell
   ./get-requirements.sh
-``
+```
 
 4- run application_server
 ```shell
   python3 application_server.py
-``
+```
 
 5- open anthor terminal window and run html_pages_api
 ```shell
    python3 html_pages_api.py
-``
+```
 
 6- copy this link and paste it in the browser
 ```shell
   http://127.0.0.1:3000
-``
+```
 
 ## Author
 
