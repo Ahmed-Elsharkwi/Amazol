@@ -156,6 +156,7 @@ def get_main_page():
     if token is not None:
         if verify_jwt(token) is not None:
             data = requests.get('http://localhost:5000/Amazol/user_info', cookies={'user_token': token})
+
             user_name = data.json()['name']
 
     

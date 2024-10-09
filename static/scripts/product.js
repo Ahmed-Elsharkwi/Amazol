@@ -25,7 +25,6 @@ const closePopupBtn = document.getElementById('closePopup');
                 });
                 if (response.ok){                     
                     const payment_methods = await response.json();
-                    console.log(payment_methods)
                     popup.innerHTML=''
                     let data = {}
                     let place_order = null
