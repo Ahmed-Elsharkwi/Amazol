@@ -5,7 +5,7 @@ from models.user_product import Product, User_Product
 from models.start import storage
 from flask import jsonify, request
 from utils.jwt_encoding_decoding_method import verify_jwt
-import base64
+import pybase64
 import os
 
 @app_views.route('/new_product', strict_slashes=False, methods=['POST'])
@@ -44,7 +44,7 @@ def add_new_product():
 
     photo_url = f"/static/{json_data['name']}.jpeg"
     with open(f'.{photo_url}', 'wb') as file:
-        file.write(base64.b64decode(json_data['photo']))
+        file.write(pybase64.b64decode(json_data['photo']))
 
     json_data['photo_url'] = photo_url
     json_data['seller_id'] = seller_id
@@ -107,7 +107,7 @@ def update_product_info():
                         os.remove(f'.{product.photo_url}')
 
                 with open(f'.{photo_url}', 'wb') as file:
-                    file.write(base64.b64decode(json_data['photo']))
+                    file.write(pybase64.b64decode(json_data['photo']))
                 product.photo_url = photo_url
             else:
                 setattr(product, key, value)

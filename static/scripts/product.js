@@ -193,4 +193,7 @@ const closePopupBtn = document.getElementById('closePopup');
                 alert(error)
             }
         }
+async function get_cart() {
+    window.location.href = "http://localhost:3000/cart"
+}
         
