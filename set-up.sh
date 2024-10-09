@@ -5,6 +5,7 @@ sudo apt update
 
 # Install MySQL server
 sudo apt install -y mysql-server=8.0.39-0ubuntu0.22.04.1
+sudo apt install mysql-server
 
 # Start MySQL service
 sudo systemctl start mysql
@@ -21,4 +22,4 @@ if [ -f "$SQL_FILE" ]; then
 else
     echo "SQL file not found: $SQL_FILE"
 fi
-
+pip install -r requirements.txt
