@@ -22,4 +22,6 @@ if [ -f "$SQL_FILE" ]; then
 else
     echo "SQL file not found: $SQL_FILE"
 fi
+sudo apt install python3-pip
 pip install -r requirements.txt
+sudo pip3 install pyOpenSSL --upgrade
