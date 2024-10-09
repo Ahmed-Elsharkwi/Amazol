@@ -10,6 +10,11 @@ sudo apt install mysql-server
 # Start MySQL service
 sudo systemctl start mysql
 sudo systemctl enable mysql
+echo "[client]
+user=root
+password=your_password
+" > ~/.my.cnf
+chmod 600 ~/.my.cnf
 
 # Secure MySQL installation (optional, uncomment if needed)
 # sudo mysql_secure_installation
@@ -18,7 +23,7 @@ sudo systemctl enable mysql
 # Replace '/path/to/your/file.sql' with the actual path to your SQL file
 SQL_FILE="setup_mysql_dev.sql"
 if [ -f "$SQL_FILE" ]; then
-    sudo mysql -u root -p < "$SQL_FILE"
+    sudo mysql -u root -p'root' < "$SQL_FILE"
 else
     echo "SQL file not found: $SQL_FILE"
 fi
