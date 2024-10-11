@@ -2,8 +2,7 @@
 ## Amazol
 
 ## introduction:
- * Amazol is an e-commerce website which you can use it to buy and sell products.
- * You can use it as a user to buy products and You use it as a seller to sell products.
+ * Amazol is a simple e-commerce website which you can use it to buy and sell products.
 
 ## Watch a video to know how to use Amazol
 
