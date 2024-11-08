@@ -5,6 +5,7 @@
  * Amazol is a simple e-commerce website which you can use it to buy and sell products.
 
 ## Watch a video to know how to use Amazol
+https://github.com/user-attachments/assets/68f205de-8da0-4830-adbd-387857f5efc2
 
 
 ## Technologies
